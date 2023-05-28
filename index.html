@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <title>家計簿アプリ</title>
+
+
+</head>
+
+<body>
+    <h1>家計簿アプリ</h1>
+
+    <div class="container">
+        <!-- 日付 今日がデフォルトで入力 -->
+        <div class="item">
+            <p>日付</p>
+            <input name="date" type="date">
+
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        </div>
+
+        <!-- カテゴリ名 -->
+        <div class="item">
+            <p>カテゴリ</p>
+            <select name="category">
+                <option value="none">-</option>
+                <option value="food1">食費(家庭)</option>
+                <option value="food2">食費(外食)</option>
+                <option value="grocery">日用品</option>
+                <option value="apperel">被服費</option>
+                <option value="beauty">美容費</option>
+                <option value="relation">交際費</option>
+                <option value="education">教育費</option>
+                <option value="medical">医療費</option>
+                <option value="elecwater">光熱水道費</option>
+                <option value="mobile">通信費</option>
+                <option value="traffic">交通費</option>
+                <option value="others">雑費</option>
+            </select>
+        </div>
+        <!-- 詳細 -->
+        <div class="item">
+            <p>詳細</p>
+            <input type="text" name="textbox">
+        </div>
+
+        <!-- 金額 -->
+        <div class="item">
+            <p>金額</p>
+            <input type="text" class="sakai-digit sakai-digit-0">
+        </div>
+
+
+
+        <!-- Saveボタン -->
+        <div class="item">
+            <p>.</p>
+            <button id="save">Save</button>
+        </div>
+    </div>  
+    <!-- テーブル -->
+    <table id="list"></table>
+
+
+
+    <script src="/js/datepicker-ja.js"></script>
+    <script src="/js/localstorage.js"></script>
+</body>
+</html>
