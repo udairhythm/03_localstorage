@@ -16,7 +16,6 @@
 
         <!-- 日付 今日がデフォルトで入力 -->
         <div class="item">
-            <p>日付</p>
             <input type="date" id="date">
             <script type="text/javascript">
                 window.onload = function () {
@@ -32,9 +31,8 @@
 
         <!-- カテゴリ名 -->
         <div class="item">
-            <p>カテゴリ</p>
             <select id="category">
-                <option value="none">-</option>
+                <option value="none">【カテゴリ】</option>
                 <option value="food1">食費(家庭)</option>
                 <option value="food2">食費(外食)</option>
                 <option value="grocery">日用品</option>
@@ -52,13 +50,11 @@
 
         <!-- 商品 -->
         <div class="item">
-            <p>商品</p>
             <input type="text" id="details" placeholder="商品">
         </div>
 
         <!-- 金額 -->
         <div class="item">
-        <p>金額</p>
             <input type="text" id="money" placeholder="金額" class="sakai-digit sakai-digit-0" style="text-align: right">
             <!-- <input type="text" onblur="kanmaChange(this);" pattern="\d*" style="text-align: right"> -->
         </div>

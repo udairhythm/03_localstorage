@@ -2,3 +2,68 @@
     display: flex;
     justify-content: flex-start;
 }
+
+body {
+    background-color: #ffff99;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.container2 {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.item p {
+    margin-bottom: 5px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+input[type='text'], select, input[type='date'] {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    height: 50px;
+    color: white;
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #333;
+    padding: 10px;
+}
+
+th, td {
+    text-align: center;
+}
