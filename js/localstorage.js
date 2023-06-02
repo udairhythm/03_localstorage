@@ -21,10 +21,35 @@ $(document).ready(function() {
 // Saveボタンを押して入力値をローカルストレージに保存
 $("#save").on("click", function() {
     // 入力された文字を取得
-    const date = $("#today").val();
+    const date = $("#date").val();
     const category = $("#category").val();
     const details = $("#details").val();
     const money = $("#money").val();
+
+    // 入力が空でないことを確認
+    if (!date || !category || !details || !money) {
+        alert("全てのフィールドを埋めてください");
+        return;
+    }
+
+    // 入力がundefinedでないことを確認
+    if (!date || !category || !details || !money) {
+        alert("全てのフィールドを埋めてください");
+        return;
+    }
+
+    // 入力が数値であることを確認
+    if (isNaN(money)) {
+        alert("金額フィールドには数値を入力してください");
+        return;
+    }
+
+
+    // if (date === undefined || category === undefined || details === undefined || money === undefined) {
+    //     alert("全てのフィールドを埋めてください");
+    //     return;
+    // }
+    
 
     const entry = {
         date: date,
@@ -33,12 +58,19 @@ $("#save").on("click", function() {
         money: money,
     };
 
+    // let dateTimeKey = date + "-" + new Date().getTime();
+    // localStorage.setItem(dateTimeKey, JSON.stringify(entry));
+
+
     // 現在の日時を取得してユニークなキーを生成
-    const now = new Date();
-    const key = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}-${now.getMilliseconds()}`;
+    let dateTimeKey = date + "-" + new Date().getTime();
+    localStorage.setItem(dateTimeKey, JSON.stringify(entry));
+
+    // const now = new Date();
+    // const key = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}-${now.getMilliseconds()}`;
 
     // ユニークなキーを使ってエントリを保存
-    localStorage.setItem(key, JSON.stringify(entry));
+    // localStorage.setItem(key, JSON.stringify(entry));
 
     // 保存したデータを表示
     const html = `
@@ -50,7 +82,7 @@ $("#save").on("click", function() {
         </tr>
     `
     $("#list").append(html);
-    $("#today").val("");
+    $("#date").val("");
     $("#category").val("");
     $("#details").val("");
     $("#money").val("");
@@ -68,7 +100,14 @@ function calculateTotal() {
     for(let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         const value = JSON.parse(localStorage.getItem(key));
-        total += parseInt(value.money);
+        const moneyValue = parseInt(value.money);
+
+        // moneyValueがNaNでないことを確認します。
+        if (isNaN(moneyValue)) {
+            console.error(`Invalid number in localStorage: ${key}: `, value);
+        } else {
+            total += moneyValue;
+        }
     }
 
     // 合計金額をテーブルに追加
@@ -77,20 +116,23 @@ function calculateTotal() {
             <th colspan="3">合計</th>
             <td>${total}</td>
         </tr>
-    `
+    `;
     $("#list").append(html);
 }
+
+
 
 // 保存ボタンをクリックしたら、合計を再計算
 $("#save").on("click", function() {
     // 現在の合計行を削除
-    $("#list tr:last").remove();
+    $("tr:contains('合計')").remove();
     // 新しい合計を計算して追加
     calculateTotal();
 });
 
 // ページ読み込み時に初めて合計を計算
 $(document).ready(function() {
+    $("tr:contains('合計')").remove();
     calculateTotal();
 });
 

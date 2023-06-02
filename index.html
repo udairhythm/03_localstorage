@@ -17,15 +17,15 @@
         <!-- 日付 今日がデフォルトで入力 -->
         <div class="item">
             <p>日付</p>
-            <input type="date" id="today">
+            <input type="date" id="date">
             <script type="text/javascript">
                 window.onload = function () {
-                  var today = new Date();
-                  today.setDate(today.getDate());
-                  var yyyy = today.getFullYear();
-                  var mm = ("0" + (today.getMonth() + 1)).slice(-2);
-                  var dd = ("0" + today.getDate()).slice(-2);
-                  document.getElementById("today").value = yyyy + '-' + mm + '-' + dd;
+                  var date = new Date();
+                  date.setDate(date.getDate());
+                  var yyyy = date.getFullYear();
+                  var mm = ("0" + (date.getMonth() + 1)).slice(-2);
+                  var dd = ("0" + date.getDate()).slice(-2);
+                  document.getElementById("date").value = yyyy + '-' + mm + '-' + dd;
                 }
               </script>
         </div>
@@ -50,9 +50,9 @@
             </select>
         </div>
 
-        <!-- 詳細 -->
+        <!-- 商品 -->
         <div class="item">
-            <p>詳細</p>
+            <p>商品</p>
             <input type="text" id="details" placeholder="商品">
         </div>
 
