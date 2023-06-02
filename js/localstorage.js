@@ -5,18 +5,22 @@ $(document).ready(function() {
         const key = localStorage.key(i);
         const value = JSON.parse(localStorage.getItem(key));
 
-        // HTMLテーブルへのデータの追加
-        const html = `
-            <tr>
-                <th>${value.date}</th>
-                <td>${value.category}</td>
-                <td>${value.details}</td>
-                <td>${value.money}</td>
-            </tr>
-        `
-        $("#list").append(html);
+        // 値が正しい形式であることを確認
+        if (value && value.date && value.category && value.details && value.money) {
+            // HTMLテーブルへのデータの追加
+            const html = `
+                <tr>
+                    <th>${value.date}</th>
+                    <td>${value.category}</td>
+                    <td>${value.details}</td>
+                    <td>${value.money}</td>
+                </tr>
+            `
+            $("#list").append(html);
+        }
     }
 });
+
 
 // Saveボタンを押して入力値をローカルストレージに保存
 $("#save").on("click", function() {
