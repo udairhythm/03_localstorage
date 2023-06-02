@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/jquery-3.7.0.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <title>家計簿アプリ</title>
 </head>
@@ -13,13 +13,21 @@
     <h1>家計簿アプリ</h1>
 
     <div class="container">
+
         <!-- 日付 今日がデフォルトで入力 -->
         <div class="item">
             <p>日付</p>
-            <input type="date" id="date-input">
-
-
-            <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+            <input type="date" id="today">
+            <script type="text/javascript">
+                window.onload = function () {
+                  var today = new Date();
+                  today.setDate(today.getDate());
+                  var yyyy = today.getFullYear();
+                  var mm = ("0" + (today.getMonth() + 1)).slice(-2);
+                  var dd = ("0" + today.getDate()).slice(-2);
+                  document.getElementById("today").value = yyyy + '-' + mm + '-' + dd;
+                }
+              </script>
         </div>
 
         <!-- カテゴリ名 -->
@@ -41,19 +49,19 @@
                 <option value="others">雑費</option>
             </select>
         </div>
+
         <!-- 詳細 -->
         <div class="item">
             <p>詳細</p>
-            <input type="text" id="details">
+            <input type="text" id="details" placeholder="商品">
         </div>
 
         <!-- 金額 -->
         <div class="item">
-            <p>金額</p>
-            <!-- <input type="text" id="money" class="sakai-digit sakai-digit-0" style="text-align: right"> -->
-            <input type="text" onblur="kanmaChange(this);" pattern="\d*" style="text-align: right">
+        <p>金額</p>
+            <input type="text" id="money" placeholder="金額" class="sakai-digit sakai-digit-0" style="text-align: right">
+            <!-- <input type="text" onblur="kanmaChange(this);" pattern="\d*" style="text-align: right"> -->
         </div>
-
 
 
         <!-- Saveボタン -->
@@ -61,11 +69,17 @@
             <p>.</p>
             <button id="save">Save</button>
         </div>
+
+        <!-- Clear 削除ボタン -->
+        <div class="item">
+            <p>.</p>
+            <button id="clear">Clear</button>
+        </div>
+
+
     </div>  
     <!-- テーブル -->
-    <div class="container">
-        <!-- (Your input fields and 'Save' button here) -->
-    
+    <div class="container2">
         <!-- The table where the data will be displayed -->
         <table id="list">
             <tr>
@@ -80,7 +94,53 @@
 
 
 
-    <script src="/js/datepicker-ja.js"></script>
-    <script src="/js/localstorage.js"></script>
+    <!-- <script src="/js/datepicker-ja.js"></script> -->
+    <script src="js/localstorage.js"></script>
 </body>
 </html>
+
+
+<!-- <div>
+    <p><b>日付：<span id="target_month"></span></b></p>
+    <p>
+    <a id="get_before_month" href="javascript:void(0);">＜＜前月</a>
+    <input type="date" id="today">
+    <script type="text/javascript">
+        window.onload = function () {
+            var today = new Date();
+            today.setDate(today.getDate());
+            var yyyy = today.getFullYear();
+            var mm = ("0" + (today.getMonth() + 1)).slice(-2);
+            var dd = ("0" + today.getDate()).slice(-2);
+            document.getElementById("today").value = yyyy + '-' + mm + '-' + dd;
+        }
+    </script>
+
+    <select id="category">
+        <option value="none">-</option>
+        <option value="food1">食費(家庭)</option>
+        <option value="food2">食費(外食)</option>
+        <option value="grocery">日用品</option>
+        <option value="apperel">被服費</option>
+        <option value="beauty">美容費</option>
+        <option value="relation">交際費</option>
+        <option value="education">教育費</option>
+        <option value="medical">医療費</option>
+        <option value="elecwater">光熱水道費</option>
+        <option value="mobile">通信費</option>
+        <option value="traffic">交通費</option>
+        <option value="others">雑費</option>
+    </select>
+
+    <input type="text" id="product_name" placeholder="商品"> -->
+    <!-- <div class="item"> -->
+    <!-- <p>金額</p> -->
+    <!-- <input type="text" id="money" placeholder="価格" class="sakai-digit sakai-digit-0" style="text-align: right"> -->
+    <!-- <input type="text" onblur="kanmaChange(this);" pattern="\d*" style="text-align: right"> -->
+    <!-- </div> -->
+    
+    <!-- <input type="button" id="add" value="追加">
+    <input type="button" id="clear" value="クリア">
+    <a id="get_next_month" href="javascript:void(0);">翌月＞＞</a>
+    </p>
+</div> -->
