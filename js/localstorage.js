@@ -1,28 +1,26 @@
-//カテゴリのvalueと日本語のマッピング
-const categoryMap = {
-    "none": "【カテゴリ】",
-    "food1": "食費(家庭)",
-    "food2": "食費(外食)",
-    "grocery": "日用品",
-    "apperel": "被服費",
-    "beauty": "美容費",
-    "relation": "交際費",
-    "education": "教育費",
-    "medical": "医療費",
-    "elecwater": "光熱水道費",
-    "mobile": "通信費",
-    "traffic": "交通費",
-    "others": "雑費"
-};
+// カテゴリのvalueと日本語のマッピング
+// const categoryMap = {
+//     "none": "【カテゴリ】",
+//     "food1": "食費(家庭)",
+//     "food2": "食費(外食)",
+//     "grocery": "日用品",
+//     "apperel": "被服費",
+//     "beauty": "美容費",
+//     "relation": "交際費",
+//     "education": "教育費",
+//     "medical": "医療費",
+//     "elecwater": "光熱水道費",
+//     "mobile": "通信費",
+//     "traffic": "交通費",
+//     "others": "雑費"
+//   };
 
-// ローカルストレージからデータを取得し、各データをテーブルに追加
+
+// ローカルストレージに保存されたデータの表示
 $(document).ready(function() {
-    for (let i = 0; i < localStorage.length; i++) {
+    // ローカルストレージからデータを取得し、各データをテーブルに追加
+    for(let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        // 「household-」で始まるキーだけを処理
-        if (!key.startsWith("household-")) {
-            continue;
-        }
         const value = JSON.parse(localStorage.getItem(key));
 
         // 値が正しい形式であることを確認
@@ -38,13 +36,11 @@ $(document).ready(function() {
                     <td>${value.details}</td>
                     <td style="text-align: right;">${formattedMoney}</td>
                 </tr>
-            `;
+            `
             $("#list").append(html);
         }
     }
 });
-
-
 
 // 金額入力欄がフォーカスを失ったときに発火するイベント
 $("#money").on("blur", function() {
@@ -64,14 +60,12 @@ $("#money").on("blur", function() {
 $("#save").on("click", function() {
     // 入力された文字を取得
     const date = $("#date").val();
-    let category = $("#category").val();
+    const category = $("#category").val();
     const details = $("#details").val();
-    let money = parseInt($("#money").val().replace(/,/g, '')); // 金額のコンマを削除して数値に変換
 
+    // 金額を数値に変換（コンマを取り除く）
+    let money = parseInt($("#money").val().replace(/,/g, ''));
 
-
-    // カテゴリを日本語に変換
-    category = categoryMap[category];
 
     // 金額が数値であることを確認
     if (isNaN(money)) {
@@ -79,16 +73,23 @@ $("#save").on("click", function() {
         return;
     }
 
+
     // 入力が空でないことを確認
     if (!date || !category || !details || !money) {
         alert("全てのフィールドを埋めてください");
         return;
     }
 
+    // 入力が数値であることを確認
+    if (isNaN(money)) {
+        alert("金額フィールドには数値を入力してください");
+        return;
+    }
+
     // 入力値が数値であることを確認した後で、再度コンマを追加
     money = money.toLocaleString();
 
-    
+
     const entry = {
         date: date,
         category: category,
@@ -96,11 +97,19 @@ $("#save").on("click", function() {
         money: money,
     };
 
+    // let dateTimeKey = date + "-" + new Date().getTime();
+    // localStorage.setItem(dateTimeKey, JSON.stringify(entry));
+
 
     // 現在の日時を取得してユニークなキーを生成
     let dateTimeKey = date + "-" + new Date().getTime();
     localStorage.setItem(dateTimeKey, JSON.stringify(entry));
 
+    // const now = new Date();
+    // const key = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}-${now.getMilliseconds()}`;
+
+    // ユニークなキーを使ってエントリを保存
+    // localStorage.setItem(key, JSON.stringify(entry));
 
     // 保存したデータを表示
     const html = `
@@ -124,35 +133,41 @@ $("#clear").on("click", function() {
     $("#list").empty();
 })
 
+
+
 // 金額の合計を計算して表示
 function calculateTotal() {
     let total = 0;
-    for (let i = 0; i < localStorage.length; i++) {
+    for(let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         const value = JSON.parse(localStorage.getItem(key));
-        const moneyValue = value && value.money ? parseInt(value.money.replace(/,/g, '')) : 0;
 
-        if (isNaN(moneyValue)) {
-            console.error(`Invalid number in localStorage: ${key}: `, value);
-            continue; // 不正なデータを無視して次のデータへ
+        // valueがnullやundefined、またはvalue.moneyがundefinedであればスキップ
+        if (!value || !value.money) {
+            continue;
         }
 
-        total += moneyValue;
-    }
-        
+        const moneyValue = parseInt(value.money.replace(/,/g, ''));
 
-    // 合計金額を表示する際にtoLocaleStringメソッドを使用してコンマ区切りを追加します。
-    const formattedTotal = total.toLocaleString();
+        // moneyValueがNaNでないことを確認します。
+        if (isNaN(moneyValue)) {
+            console.error(`Invalid number in localStorage: ${key}: `, value);
+        } else {
+            total += moneyValue;
+        }
+    }
+
+    // ここでも、合計金額を表示する際にtoLocaleStringメソッドを使用してコンマ区切りを追加します。
+    total = total.toLocaleString();
 
     // 合計金額をテーブルに追加
     const html = `
         <tr>
             <th colspan="3">合計</th>
-            <td style="text-align: right;">${formattedTotal}</td>
+            <td style="text-align: right;">${total}</td>
         </tr>
     `;
     $("#list").append(html);
-
 }
 
 
@@ -174,7 +189,8 @@ $(document).ready(function() {
     displayComment();
 });
 
-// 合計額に基づいたコメントを表示する新たな関数です。
+
+// 合計額に基づいたコメントを表示する関数です。
 function displayComment() {
     var total = 0;
 
@@ -182,6 +198,12 @@ function displayComment() {
     for(let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         const value = JSON.parse(localStorage.getItem(key));
+
+        // valueがnullやundefined、またはvalue.moneyがundefinedであればスキップ
+        if (!value || !value.money) {
+            continue;
+        }
+
         const moneyValue = parseInt(value.money);
 
         // moneyValueがNaNでないことを確認します。
@@ -192,16 +214,14 @@ function displayComment() {
 
     // 合計額に基づいてコメントを選択します。
     var comment;
-    if (total == 0) {
-        comment = "今月も節約がんばろう！";
-    } else if (total < 100000) {
-        comment = "よく節約したね";
+    if (total < 100000) {
+        comment = "節約したね";
     } else if (total < 200000) {
         comment = "こんなもんかな";
     } else if (total < 300000) {
         comment = "ちょっと多いね";
     } else if (total < 400000) {
-        comment = "はい、使い過ぎ~、クレカ止めまーす";
+        comment = "はい、使い過ぎ";
     } else if (total < 500000) {
         comment = "どしたん、話聞こか？";
     } else {
@@ -211,4 +231,3 @@ function displayComment() {
     // コメントをウェブページに表示します。
     document.getElementById("comment").textContent = comment;
 }
-
