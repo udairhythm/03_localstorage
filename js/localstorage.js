@@ -203,11 +203,11 @@ function displayComment() {
     if (total < 100000) {
         comment = "節約したね";
     } else if (total < 200000) {
-        comment = "こんなもんかな";
+        comment = "こんなもんかなー";
     } else if (total < 300000) {
         comment = "ちょっと多いね";
     } else if (total < 400000) {
-        comment = "はい、使い過ぎ";
+        comment = "はい、使い過ぎ~、クレカ止めましたー";
     } else if (total < 500000) {
         comment = "どしたん、話聞こか？";
     } else {
