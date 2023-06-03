@@ -1,19 +1,75 @@
-// カテゴリのvalueと日本語のマッピング
-// const categoryMap = {
-//     "none": "【カテゴリ】",
-//     "food1": "食費(家庭)",
-//     "food2": "食費(外食)",
-//     "grocery": "日用品",
-//     "apperel": "被服費",
-//     "beauty": "美容費",
-//     "relation": "交際費",
-//     "education": "教育費",
-//     "medical": "医療費",
-//     "elecwater": "光熱水道費",
-//     "mobile": "通信費",
-//     "traffic": "交通費",
-//     "others": "雑費"
-//   };
+//カテゴリのvalueと日本語のマッピング
+const categoryMap = {
+    "none": "【カテゴリ】",
+    "food1": "食費(家庭)",
+    "food2": "食費(外食)",
+    "grocery": "日用品",
+    "apperel": "被服費",
+    "beauty": "美容費",
+    "relation": "交際費",
+    "education": "教育費",
+    "medical": "医療費",
+    "elecwater": "光熱水道費",
+    "mobile": "通信費",
+    "traffic": "交通費",
+    "others": "雑費"
+  };
+
+// Saveボタンを押して入力値をローカルストレージに保存
+$("#save").on("click", function() {
+    const date = $("#date").val();
+    const categoryValue = $("#category").val();
+    const categoryLabel = categoryMap[categoryValue];
+    const details = $("#details").val();
+    let money = $("#money").val().replace(/,/g, '');
+    money = parseInt(money);
+
+    if (!date || !categoryValue || !details || money === '') {
+        alert("全てのフィールドを埋めてください");
+        return;
+    }
+
+    if (isNaN(money)) {
+        alert("金額フィールドには数値を入力してください");
+        return;
+    }
+
+    money = money.toLocaleString();
+
+    const entry = {
+        date: date,
+        category: categoryLabel,
+        details: details,
+        money: money,
+    };
+
+    let dateTimeKey = date + "-" + new Date().getTime();
+    localStorage.setItem(dateTimeKey, JSON.stringify(entry));
+
+    const html = `
+        <tr>
+            <th>${date}</th>
+            <td>${categoryLabel}</td>
+            <td>${details}</td>
+            <td>${money}</td>
+        </tr>
+    `;
+    $("#list").append(html);
+
+    // フォームをクリアする
+    $("#date").val("");
+    $("#category").val("");
+    $("#details").val("");
+    $("#money").val("");
+
+    // 現在の合計行を削除
+    $("tr:contains('合計')").remove();
+    // 新しい合計を計算して追加
+    calculateTotal();
+    // 新しいコメントを表示
+    displayComment();
+});
+
 
 
 // ローカルストレージに保存されたデータの表示
@@ -36,11 +92,12 @@ $(document).ready(function() {
                     <td>${value.details}</td>
                     <td style="text-align: right;">${formattedMoney}</td>
                 </tr>
-            `
+            `;
             $("#list").append(html);
         }
     }
 });
+
 
 // 金額入力欄がフォーカスを失ったときに発火するイベント
 $("#money").on("blur", function() {
@@ -54,78 +111,6 @@ $("#money").on("blur", function() {
     }
 });
 
-
-
-// Saveボタンを押して入力値をローカルストレージに保存
-$("#save").on("click", function() {
-    // 入力された文字を取得
-    const date = $("#date").val();
-    const category = $("#category").val();
-    const details = $("#details").val();
-
-    // 金額を数値に変換（コンマを取り除く）
-    let money = parseInt($("#money").val().replace(/,/g, ''));
-
-
-    // 金額が数値であることを確認
-    if (isNaN(money)) {
-        alert("金額フィールドには数値を入力してください");
-        return;
-    }
-
-
-    // 入力が空でないことを確認
-    if (!date || !category || !details || !money) {
-        alert("全てのフィールドを埋めてください");
-        return;
-    }
-
-    // 入力が数値であることを確認
-    if (isNaN(money)) {
-        alert("金額フィールドには数値を入力してください");
-        return;
-    }
-
-    // 入力値が数値であることを確認した後で、再度コンマを追加
-    money = money.toLocaleString();
-
-
-    const entry = {
-        date: date,
-        category: category,
-        details: details,
-        money: money,
-    };
-
-    // let dateTimeKey = date + "-" + new Date().getTime();
-    // localStorage.setItem(dateTimeKey, JSON.stringify(entry));
-
-
-    // 現在の日時を取得してユニークなキーを生成
-    let dateTimeKey = date + "-" + new Date().getTime();
-    localStorage.setItem(dateTimeKey, JSON.stringify(entry));
-
-    // const now = new Date();
-    // const key = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}-${now.getMilliseconds()}`;
-
-    // ユニークなキーを使ってエントリを保存
-    // localStorage.setItem(key, JSON.stringify(entry));
-
-    // 保存したデータを表示
-    const html = `
-        <tr>
-            <th>${date}</th>
-            <td>${category}</td>
-            <td>${details}</td>
-            <td>${money}</td>
-        </tr>
-    `
-    $("#list").append(html);
-    $("#date").val("");
-    $("#category").val("");
-    $("#details").val("");
-    $("#money").val("");
-});
 
 // 全削除イベント
 $("#clear").on("click", function() {
@@ -204,7 +189,8 @@ function displayComment() {
             continue;
         }
 
-        const moneyValue = parseInt(value.money);
+        // value.moneyは3桁区切りの文字列なので、先にコンマを削除
+        const moneyValue = parseInt(value.money.replace(/,/g, ''));
 
         // moneyValueがNaNでないことを確認します。
         if (!isNaN(moneyValue)) {
@@ -231,3 +217,4 @@ function displayComment() {
     // コメントをウェブページに表示します。
     document.getElementById("comment").textContent = comment;
 }
+
